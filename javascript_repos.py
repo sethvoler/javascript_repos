@@ -15,12 +15,16 @@ print("Total repositories:", response_dict['total_count'])
 
 # 探索有关仓库的信息
 repo_dicts = response_dict['items']
+print("Number of items:", len(repo_dicts))
 
-names, stars = [], []
-
+names, plot_dicts = [], []
 for repo_dict in repo_dicts:
   names.append(repo_dict['name'])
-  stars.append(repo_dict['stargazers_count'])
+  plot_dict = {
+    'value': repo_dict['stargazers_count'],
+    'label': repo_dict['description']
+  }
+  plot_dicts.append(plot_dict)
 
 # 可视化
 my_style = LS('#333366', base_style=LCS)
@@ -39,5 +43,5 @@ chart = pygal.Bar(my_config, style=my_style)
 chart.title = 'Most-Starred JavaScript Projects on Github'
 chart.x_labels = names
 
-chart.add('', stars)
+chart.add('', plot_dicts)
 chart.render_to_file('javascript_repos.svg')
